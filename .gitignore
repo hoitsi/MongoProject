@@ -1,0 +1,6 @@
+# Ohitetaan tietokantojen tallennuskansiot
+**/data/
+# Ohitetaan mahdolliset lokit
+*.log
+# Ohitetaan käyttöjärjestelmän turhat tiedostot
+.DS_Store
