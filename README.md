@@ -10,4 +10,4 @@ Upotetut dokumentit (Embedded Documents). Kaikki tuotteen tekniset speksit on ta
 ## 2. Asennus ja testaus
 
 1. `docker compose up -d`
-   
+2. username : root / password : password
