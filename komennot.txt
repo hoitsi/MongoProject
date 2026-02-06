@@ -153,6 +153,10 @@ db.tuotteet.createIndex({ "kategoria": 1, "hinta": -1 });
 db.tuotteet.createIndex({ "alusta": 1 });
 db.tuotteet.createIndex({ "tagit": 1 }); // Nopeampaa hakea tagien perusteella
 
+// INDEKSIEN TARKISTUS
+db.tuotteet.getIndexes();
+db.tuotteet.find({ "kategoria": "peli" }).sort({ "hinta": -1 }).explain("executionStats")
+
 
 2. HAKEMINEN (READ / SEARCH)
 ------------------------------------------------------------
