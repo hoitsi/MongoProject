@@ -1,0 +1,221 @@
+
+
+1. ALUSTUS JA TIETOKANNAN LUONTI
+------------------------------------------------------------
+// Otetaan käyttöön tietokanta
+use retro_pelikauppa;
+
+// Tyhjennetään mahdollinen vanha data
+db.tuotteet.drop();
+
+// LAAJA TESTIDATA (INSERT)
+// Huomaa, että eri tuotteilla on eri kenttiä speksien sisällä (Polymorfismi)
+db.tuotteet.insertMany([
+  {
+    "nimi": "Super Mario Bros.",
+    "kategoria": "peli",
+    "alusta": "NES",
+    "hinta": 150.00,
+    "varastossa": 2,
+    "speksit": { "kunto": "CIB", "alue": "PAL-A", "vuosi": 1985, "harvinaisuus": "Korkea" },
+    "tagit": ["nintendo", "tasohyppely", "klassikko"]
+  },
+  {
+    "nimi": "The Legend of Zelda",
+    "kategoria": "peli",
+    "alusta": "NES",
+    "hinta": 95.00,
+    "varastossa": 3,
+    "speksit": { "kunto": "Loose", "alue": "PAL-B", "vuosi": 1987 },
+    "tagit": ["nintendo", "seikkailu", "zelda"]
+  },
+  {
+    "nimi": "Nintendo 64 -konsoli",
+    "kategoria": "laite",
+    "alusta": "N64",
+    "hinta": 180.00,
+    "varastossa": 1,
+    "speksit": { "vari": "Jungle Green", "ohjaimet": 1, "expansion_pak": true },
+    "tagit": ["nintendo", "konsoli", "64-bit"]
+  },
+  {
+    "nimi": "Final Fantasy VII",
+    "kategoria": "peli",
+    "alusta": "PlayStation",
+    "hinta": 75.00,
+    "varastossa": 5,
+    "speksit": { "kunto": "Hyvä", "levyjen_maara": 3, "platinum_versio": false },
+    "tagit": ["rpg", "sony", "square-enix"]
+  },
+  {
+    "nimi": "Sega Mega Drive 2",
+    "kategoria": "laite",
+    "alusta": "Mega Drive",
+    "hinta": 65.00,
+    "varastossa": 4,
+    "speksit": { "johdot_mukana": true, "ohjaimet": 2 },
+    "tagit": ["sega", "16-bit", "retro"]
+  },
+  {
+    "nimi": "Pokemon Red",
+    "kategoria": "peli",
+    "alusta": "GameBoy",
+    "hinta": 120.00,
+    "varastossa": 2,
+    "speksit": { "kunto": "Mint", "paristo_vaihdettu": true, "vuosi": 1998 },
+    "tagit": ["pokemon", "nintendo", "handheld"]
+  },
+  {
+    "nimi": "Sonic the Hedgehog",
+    "kategoria": "peli",
+    "alusta": "Mega Drive",
+    "hinta": 40.00,
+    "varastossa": 6,
+    "speksit": { "kunto": "CIB", "alue": "PAL" },
+    "tagit": ["sega", "tasohyppely"]
+  },
+  {
+    "nimi": "GameBoy Color -keltainen",
+    "kategoria": "laite",
+    "alusta": "GameBoy",
+    "hinta": 85.00,
+    "varastossa": 2,
+    "speksit": { "kunto": "Naarmuton", "paristokansi_tallella": true },
+    "tagit": ["nintendo", "handheld", "keltainen"]
+  },
+  {
+    "nimi": "NES Ohjain",
+    "kategoria": "oheistuote",
+    "alusta": "NES",
+    "hinta": 15.00,
+    "varastossa": 10,
+    "speksit": { "alkuperainen": true, "kaapelin_pituus": "1.5m" },
+    "tagit": ["tarvike", "nintendo"]
+  },
+  {
+    "nimi": "Metroid Prime",
+    "kategoria": "peli",
+    "alusta": "GameCube",
+    "hinta": 45.00,
+    "varastossa": 3,
+    "speksit": { "kunto": "Hyvä", "ohjekirja": true },
+    "tagit": ["nintendo", "fps", "metroid"]
+  },
+  {
+    "nimi": "GoldenEye 007",
+    "kategoria": "peli",
+    "alusta": "N64",
+    "hinta": 35.00,
+    "varastossa": 8,
+    "speksit": { "kunto": "Loose", "alue": "PAL" },
+    "tagit": ["nintendo", "fps", "bond"]
+  },
+  {
+    "nimi": "Pikachu Pehmolelu",
+    "kategoria": "oheistuote",
+    "alusta": "Muu",
+    "hinta": 25.00,
+    "varastossa": 15,
+    "speksit": { "koko": "20cm", "materiaali": "Pehmo" },
+    "tagit": ["pokemon", "pehmo", "merch"]
+  },
+  {
+    "nimi": "Donkey Kong Country",
+    "kategoria": "peli",
+    "alusta": "SNES",
+    "hinta": 55.00,
+    "varastossa": 3,
+    "speksit": { "kunto": "Hyvä", "alue": "PAL" },
+    "tagit": ["nintendo", "rare", "tasohyppely"]
+  },
+  {
+    "nimi": "SNES-konsoli",
+    "kategoria": "laite",
+    "alusta": "SNES",
+    "hinta": 110.00,
+    "varastossa": 1,
+    "speksit": { "malli": "SNES-001", "ohjaimet": 2 },
+    "tagit": ["nintendo", "16-bit"]
+  },
+  {
+    "nimi": "Crash Bandicoot",
+    "kategoria": "peli",
+    "alusta": "PlayStation",
+    "hinta": 30.00,
+    "varastossa": 4,
+    "speksit": { "kunto": "Tyydyttävä", "kotelo_rikki": true },
+    "tagit": ["sony", "tasohyppely"]
+  }
+]);
+
+// LUODAAN INDEKSIT (Kriittinen skaalautuvuuden kannalta)
+db.tuotteet.createIndex({ "kategoria": 1, "hinta": -1 });
+db.tuotteet.createIndex({ "alusta": 1 });
+db.tuotteet.createIndex({ "tagit": 1 }); // Nopeampaa hakea tagien perusteella
+
+
+2. HAKEMINEN (READ / SEARCH)
+------------------------------------------------------------
+// A. Perushaku: Kaikki pelit aakkosjärjestyksessä
+db.tuotteet.find({ "kategoria": "peli" }).sort({ "nimi": 1 });
+
+// B. Monimutkainen suodatus: Kalliit Nintendo-tuotteet
+db.tuotteet.find({ 
+  "hinta": { $gt: 100 }, 
+  "tagit": "nintendo" 
+});
+
+// C. Haku alidokumentin (Embedded) sisältä: Etsi kaikki "CIB" -kuntoiset tuotteet
+db.tuotteet.find({ "speksit.kunto": "CIB" });
+
+// D. Taulukko-haku: Etsi tuotteet, joilla on sekä 'nintendo' että 'handheld' tagit
+db.tuotteet.find({ "tagit": { $all: ["nintendo", "handheld"] } });
+
+// E. Or-haku: Etsi tuotteet jotka ovat joko PlayStation tai Sega alustalla
+db.tuotteet.find({ $or: [ { "alusta": "PlayStation" }, { "alusta": "Mega Drive" } ] });
+
+
+3. PÄIVITTÄMINEN (UPDATE)
+------------------------------------------------------------
+// A. Yksittäisen kentän päivitys (Hinnan muutos)
+db.tuotteet.updateOne(
+  { "nimi": "Final Fantasy VII" },
+  { $set: { "hinta": 85.00 } }
+);
+
+// B. Laskennallinen päivitys (Vähennetään varastoa yhdellä, kun tuote myydään)
+db.tuotteet.updateOne(
+  { "nimi": "Super Mario Bros." },
+  { $inc: { "varastossa": -1 } }
+);
+
+// C. Taulukon päivittäminen (Lisätään uusi tagi tuotteelle)
+db.tuotteet.updateOne(
+  { "nimi": "Nintendo 64 -konsoli" },
+  { $push: { "tagit": "keräilyharvinaisuus" } }
+);
+
+
+4. POISTAMINEN (DELETE)
+------------------------------------------------------------
+// Poistetaan tuotteet, jotka ovat loppu varastosta
+db.tuotteet.deleteMany({ "varastossa": 0 });
+
+
+5. ANALYTIIKKA (AGGREGATION) - Se "vakuuttavin" osa
+------------------------------------------------------------
+// A. Varaston kokonaisarvo euroina kategorioittain
+db.tuotteet.aggregate([
+  { $group: { 
+      _id: "$kategoria", 
+      kokonaisarvo: { $sum: { $multiply: ["$hinta", "$varastossa"] } },
+      tuotteita_kpl: { $sum: "$varastossa" }
+  }}
+]);
+
+// B. Keskimääräinen hinta per alusta (vain peleille)
+db.tuotteet.aggregate([
+  { $match: { "kategoria": "peli" } },
+  { $group: { _id: "$alusta", keskihinta: { $avg: "$hinta" } } },
+  { $sort: { "keskihinta": -1 } }
+]);
