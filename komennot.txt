@@ -9,7 +9,7 @@ use retro_pelikauppa;
 db.tuotteet.drop();
 
 // LAAJA TESTIDATA (INSERT)
-// Huomaa, että eri tuotteilla on eri kenttiä speksien sisällä (Polymorfismi)
+// Huomaa, että eri tuotteilla on eri kenttiä speksien sisällä
 db.tuotteet.insertMany([
   {
     "nimi": "Super Mario Bros.",
